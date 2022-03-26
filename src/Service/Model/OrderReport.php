@@ -56,4 +56,18 @@ class OrderReport
      * @var string
      */
     public string $customer_state;
+
+    /**
+     * Customer shipping address longitude.
+     *
+     * @var float|null
+     */
+    public float|null $longitude = 0;
+
+    /**
+     * Customer shipping address latitude.
+     *
+     * @var float|null
+     */
+    public float|null $latitude = 0;
 }

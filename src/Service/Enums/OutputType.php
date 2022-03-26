@@ -8,9 +8,11 @@ namespace App\Service\Enums;
  */
 enum OutputType: string
 {
-    case CSV  = 'csv';
-    case JSON = 'json';
-    case XML  = 'xml';
+    case CSV   = 'csv';
+    case JSON  = 'json';
+    case XML   = 'xml';
+    case JSONL = 'jsonl';
+    case YAML  = 'yaml';
 
     /**
      * Gets all output type values.
