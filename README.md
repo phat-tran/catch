@@ -42,6 +42,17 @@ Run `docker-compose exec php php bin/phpunit` to test.
       
 ## Work with the code
 
+### Configurations.
+
+App configurations are stored in `.env`:
+
+- `ORDERS_JSON_FILE_URL`: the URL of the input Jsonl file.
+- `ORDERS_FILE_SAVED_PATH`: the path to save input and output file.
+- `ORDERS_OUTPUT_FILE_NAME`: the default output file name. 
+- `MAILER_DSN`: the mailer DSN. Read more at [Symfony Mailer](https://symfony.com/doc/current/mailer.html#using-built-in-transports).
+- `MAILER_FROM`: the default sender's email address.
+- `OPEN_STREET_MAP_API`: the OpenStreetMap API which we can append the shipping address to.
+
 #### Add more command's options.
 
 1. Add more options in `src/Command/ProcessOrderCommand.php`. `ProcessOrderCommand->configure()`.
