@@ -4,6 +4,7 @@ namespace App\Service\Output;
 
 
 use App\Service\Enums\OutputType;
+use Exception;
 
 /**
  * Class OutputJsonl handles Jsonl output.
@@ -21,6 +22,7 @@ class OutputJsonl extends Output
      * Generates the report and return current object.
      *
      * @return static
+     * @throws Exception
      */
     public function write(): static
     {

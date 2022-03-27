@@ -4,6 +4,7 @@ namespace App\Service\Output;
 
 
 use App\Service\Enums\OutputType;
+use Exception;
 use SimpleXMLElement;
 
 /**
@@ -17,6 +18,7 @@ class OutputXml extends Output
      * Generates the report and return current object.
      *
      * @return static
+     * @throws Exception
      */
     public function write(): static
     {

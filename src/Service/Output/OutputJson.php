@@ -4,6 +4,7 @@ namespace App\Service\Output;
 
 
 use App\Service\Enums\OutputType;
+use Exception;
 
 /**
  * Class OutputJson handles Json output.
@@ -14,6 +15,7 @@ class OutputJson extends Output
      * Generates the report and return current object.
      *
      * @return static
+     * @throws Exception
      */
     public function write(): static
     {

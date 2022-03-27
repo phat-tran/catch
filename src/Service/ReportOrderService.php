@@ -27,7 +27,7 @@ class ReportOrderService
      *
      * @var OrderReport[]
      */
-    private array $orderReports;
+    private array $orderReports = [];
 
     /**
      * Input file path.
@@ -65,6 +65,16 @@ class ReportOrderService
     }
 
     /**
+     * Gets order reports.
+     *
+     * @return OrderReport[]
+     */
+    public function getOrderReports(): array
+    {
+        return $this->orderReports;
+    }
+
+    /**
      * Gets output engine.
      *
      * @return Output
@@ -80,9 +90,11 @@ class ReportOrderService
      * @param OrderReport[] $reports
      *
      * @return void
+     * @throws Exception
      */
     public function writeOrderReports(array $reports): void
     {
+        $this->output->validateFileHandle();
         $this->output->setOrderReports($reports);
         $this->output->write();
     }
@@ -96,14 +108,11 @@ class ReportOrderService
      */
     public function &generateOrderReports(): Generator
     {
+        $this->validateInputFile();
+
         // Open input file to read.
 
         $handleInput = fopen($this->inputFilePath, 'r');
-
-        if (!$handleInput)
-        {
-            throw new Exception('Error opening the input file: ' . $this->inputFilePath);
-        }
 
         // Get input file size to calculate progress percentage.
 
@@ -403,6 +412,26 @@ class ReportOrderService
         catch (Exception $e)
         {
             return [];
+        }
+    }
+
+    /**
+     * Validates input file.
+     *
+     * @throws Exception
+     */
+    private function validateInputFile(): void
+    {
+        if (filesize($this->inputFilePath) === 0)
+        {
+            throw new Exception('Input file is empty.');
+        }
+
+        $handle = fopen($this->inputFilePath, 'r');
+
+        if (!$handle)
+        {
+            throw new Exception('Error opening the input file: ' . $this->inputFilePath);
         }
     }
 }

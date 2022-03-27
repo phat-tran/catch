@@ -158,17 +158,15 @@ abstract class Output
     /**
      * Validates output file handle opened and ready to write to.
      *
-     * @return bool
+     * @return void
      * @throws Exception
      */
-    protected function validateFileHandle(): bool
+    public function validateFileHandle(): void
     {
         if (!$this->handle)
         {
             throw new Exception('Error opening the output file to write: ' . $this->getOutputFilePath());
         }
-
-        return true;
     }
 
     /**

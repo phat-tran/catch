@@ -26,6 +26,16 @@ class EmailService
     }
 
     /**
+     * Gets mailer object.
+     *
+     * @return MailerInterface
+     */
+    public function getMailer(): MailerInterface
+    {
+        return $this->mailer;
+    }
+
+    /**
      * Sends email with report attachment.
      *
      * @param string   $from           Sender email address.
@@ -35,7 +45,7 @@ class EmailService
      *
      * @throws TransportExceptionInterface
      */
-    public function sendReport(string $from, array $to, string $subject, string $reportFilePath)
+    public function sendReport(string $from, array $to, string $subject, string $reportFilePath): void
     {
         $email = (new Email())
             ->from($from)

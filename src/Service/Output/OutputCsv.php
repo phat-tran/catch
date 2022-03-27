@@ -4,6 +4,7 @@ namespace App\Service\Output;
 
 
 use App\Service\Enums\OutputType;
+use Exception;
 
 /**
  * Class OutputCsv handles Csv output.
@@ -21,10 +22,18 @@ class OutputCsv extends Output
      * Generates the report and return current object.
      *
      * @return static
+     * @throws Exception
      */
     public function write(): static
     {
         $this->validateFileHandle();
+
+        // If there are nothing to write, skip it.
+
+        if (empty($this->orderReports))
+        {
+            return $this;
+        }
 
         if ($this->outputFileEmpty())
         {
