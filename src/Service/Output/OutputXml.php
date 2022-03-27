@@ -92,6 +92,8 @@ class OutputXml extends Output
      */
     public function validateOutputFile(): bool
     {
+        // TODO: Validate output file to see it has valid format.
+
         return true;
     }
 }

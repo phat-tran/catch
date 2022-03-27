@@ -69,8 +69,9 @@ class OutputCsv extends Output
     public function validateOutputFile(): bool
     {
         /**
-         * TODO: Let's use https://csvlint.io/ API to validate our CSV file.
-         * But apparently it doesn't work...
+         * TODO: Validate output file to see it has valid format.
+         *  Let's use https://csvlint.io/ API to validate our CSV file.
+         *  But apparently the API doesn't seem to work...
          */
 
         return true;
