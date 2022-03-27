@@ -18,6 +18,7 @@ use App\Service\RequestOrderService;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
+use Throwable;
 
 class ProcessOrderCommand extends Command
 {
@@ -44,7 +45,7 @@ class ProcessOrderCommand extends Command
                 null,
                 InputOption::VALUE_OPTIONAL,
                 'Which output format do you like for the report? Allow ' .
-                    implode(', ', OutputType::getValues()),
+                implode(', ', OutputType::getValues()),
                 OutputType::CSV->value,
             )
             ->addOption(
@@ -148,32 +149,21 @@ class ProcessOrderCommand extends Command
 
             $output->writeln('Report is saved to ' . $reportService->getOutput()->getOutputFilePath());
 
+            // Let's validate the output file. Is it valid or not?
+
             $reportService->getOutput()->validateOutputFile();
 
-            // If email address provided, send report by email.
+            // Send report by email (if email addresses provided).
 
             if (!empty($emailAddresses))
             {
-                $emailService = new EmailService(new Mailer(Transport::fromDsn($_ENV['MAILER_DSN'])));
-                $emailService->sendReport(
-                    $_ENV['MAILER_FROM'],
-                    $emailAddresses,
-                    basename($reportService->getOutput()->getOutputFilePath()),
-                    $reportService->getOutput()->getOutputFilePath(),
-                );
-
+                self::sendEmailWithReport($reportService->getOutput()->getOutputFilePath(), $emailAddresses);
                 $output->writeln('Email sent!');
             }
 
             return Command::SUCCESS;
         }
-        catch (Exception $e)
-        {
-            $output->writeln($e->getMessage());
-
-            return Command::FAILURE;
-        }
-        catch (TransportExceptionInterface $e)
+        catch (Throwable $e)
         {
             $output->writeln($e->getMessage());
 
@@ -181,6 +171,24 @@ class ProcessOrderCommand extends Command
         }
     }
 
+    /**
+     * Sends email with the report as attachment.
+     *
+     * @param string $outputFilePath The output file path.
+     * @param array  $emailAddresses The recipient's email addresses.
+     *
+     * @throws TransportExceptionInterface
+     */
+    private static function sendEmailWithReport(string $outputFilePath, array $emailAddresses): void
+    {
+        $emailService = new EmailService(new Mailer(Transport::fromDsn($_ENV['MAILER_DSN'])));
+        $emailService->sendReport(
+            $_ENV['MAILER_FROM'],
+            $emailAddresses,
+            basename($outputFilePath),
+            $outputFilePath,
+        );
+    }
 
     /**
      * Validates file name.
@@ -248,7 +256,10 @@ class ProcessOrderCommand extends Command
      */
     private static function validateGeolocation(mixed $value): void
     {
-        if (!in_array($value, [0, 1]))
+        if (!in_array($value, [
+            0,
+            1,
+        ]))
         {
             throw new Exception('Geolocation should only be 1 or 0.');
         }
